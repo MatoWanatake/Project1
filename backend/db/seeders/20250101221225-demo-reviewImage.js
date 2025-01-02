@@ -1,10 +1,14 @@
 'use strict';
+const { reviewImage } = require('../models');
 
-// const { up, down } = require("./20241213042854-demo-user");
-
+const { up, down } = require("./20241213042854-demo-user");
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+}
 module.exports = {
   async up (queryInterface, Sequelize)  {
-    await queryInterface.bulkInsert('ReviewImages', [
+    await reviewImage.bulkCreate([
       {
         url: 'https://example.com/review-images/image1.jpg',
         reviewId: 1,
@@ -17,10 +21,17 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    ]);
+    ], { validate: true });
   },
 
   async down (queryInterface, Sequelize)  {
-    await queryInterface.bulkDelete('ReviewImages', null, {});
-  },
+    options.tableName = 'reviewImages';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      url: { [Op.in]: [
+        'https://example.com/review-images/image1.jpg',
+        'https://example.com/review-images/image2.jpg',
+      ]}
+    }, {});
+  }
 };

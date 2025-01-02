@@ -1,8 +1,14 @@
 'use strict';
-
+const { mapFinderOptions } = require('sequelize/types/utils');
+const { Spot } = require('../models');
+const { down, up } = require('./20241213042854-demo-user');
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+}
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Spots', [
+  async up (queryInterface, Sequelize)  {
+    await Spot.bulkCreate([
       {
         ownerId: 1,
         address: '123 The way',
@@ -29,10 +35,15 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ]);
+    ], { validate: true});
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Spots', null, {});
+  async down (queryInterface, Sequelize)  {
+    options.tableName = 'Spot';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      name: { [Op.in]: ['Beachfront Spot', 'Mountain Retreat'] }
+
+    }, {});
   }
 };
