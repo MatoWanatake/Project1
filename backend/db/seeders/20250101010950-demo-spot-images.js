@@ -1,5 +1,4 @@
 'use strict';
-const { mapFinderOptions } = require('sequelize/types/utils');
 const { SpotImage, sequelize } = require('../models');
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -35,7 +34,7 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
    options.tableName = 'SpotImage';
-   const Op = sequelize.Op;
+   const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       // what key value am i supposed to have here?
       spotId: { [Op.in]: [1,2] },

@@ -1,5 +1,4 @@
 'use strict';
-const { mapFinderOptions } = require('sequelize/types/utils');
 const { Spot } = require('../models');
 const { down, up } = require('./20241213042854-demo-user');
 let options = {};
