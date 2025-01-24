@@ -45,8 +45,11 @@ module.exports = {
       }
     }, options);
   },
+
   async down(queryInterface, Sequelize) {
     options.tableName = "Bookings";
+        // await queryInterface.removeConstraint("airbnb_schema.Spots", "Spots_userId_fkey")
     await queryInterface.dropTable(options);
+
   }
 };

@@ -1,5 +1,5 @@
 'use strict';
-const { reviewImage } = require('../models');
+const { ReviewImage } = require('../models');
 
 const { up, down } = require("./20241213042854-demo-user");
 let options = {};
@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 module.exports = {
   async up (queryInterface, Sequelize)  {
-    await reviewImage.bulkCreate([
+    await ReviewImage.bulkCreate([
       {
         url: 'https://example.com/review-images/image1.jpg',
         reviewId: 1,
@@ -25,7 +25,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize)  {
-    options.tableName = 'reviewImages';
+    options.tableName = 'ReviewImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       url: { [Op.in]: [

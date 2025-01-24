@@ -11,17 +11,16 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
 
-      // User.hasMany(models.Booking, {
-      //   foreignKey: 'userId',
-      //   as: 'bookings',
-      //   onDelete: 'CASCADE',
-      // });
+      User.hasMany(models.Booking, {
+        foreignKey: 'userId',
+        as: 'bookings',
+        onDelete: 'CASCADE',
+      });
 
-      // User.hasMany(models.Review, {
-      //   foreignKey: 'userId',
-      //   as: 'reviews',
-      //   onDelete: 'CASCADE',
-      // });
+      User.hasMany(models.Review, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
     }
   }
 

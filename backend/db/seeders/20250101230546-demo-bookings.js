@@ -10,6 +10,7 @@ module.exports = {
   async up (queryInterface, Sequelize)  {
     await Booking.bulkCreate([
       {
+        id: 1,
         userId: 1,
         startDate: '2024-01-01',
         endDate: '2024-01-07',
@@ -18,6 +19,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        id: 2,
         userId: 2,
         startDate: '2024-02-01',
         endDate: '2024-02-10',

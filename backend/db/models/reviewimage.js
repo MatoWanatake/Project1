@@ -1,18 +1,16 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class reviewImage extends Model {
+  class ReviewImage extends Model {
 
     static associate(models) {
-      reviewImage.belongsTo(models.Review, {
+      ReviewImage.belongsTo(models.Review, {
         foreignKey: 'reviewId',
         onDelete: 'CASCADE'
       });
     }
   }
-  reviewImage.init({
+  ReviewImage.init({
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -33,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'reviewImage',
+    modelName: 'ReviewImage',
   });
-  return reviewImage;
+  return ReviewImage;
 };

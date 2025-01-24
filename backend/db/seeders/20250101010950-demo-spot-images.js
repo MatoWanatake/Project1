@@ -36,7 +36,6 @@ module.exports = {
    options.tableName = 'SpotImage';
    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      // what key value am i supposed to have here?
       spotId: { [Op.in]: [1,2] },
     });
   }

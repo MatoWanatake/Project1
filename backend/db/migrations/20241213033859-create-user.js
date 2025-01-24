@@ -52,7 +52,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "Users";
-    await queryInterface.removeConstraint("airbnb_schema.Bookings", "Bookings_userId_fkey")
+    // await queryInterface.removeConstraint("airbnb_schema.Bookings", "Bookings_userId_fkey")
     return queryInterface.dropTable(options);
   }
 };

@@ -29,16 +29,16 @@ router.post(
     '/',
     validateLogin,
     async (req, res, next) => {
-      const { id, firstName, lastName, username,email } = req.body;
+      const { credential, password } = req.body;
 
       const user = await User.unscoped().findOne({
         where: {
           [Op.or]: {
-            id: id,
-            firstName: firstName,
-            lastName:  lastName,
-            username: username,
-            email: email
+            // id: id,
+            // firstName: firstName,
+            // lastName:  lastName,
+            username: credential,
+            hashedPassword: password
           }
         }
       });
@@ -50,6 +50,7 @@ router.post(
         err.errors = { credential: 'The provided credentials were invalid.' };
         return next(err);
       }
+
 
       const safeUser = {
             id: user.id,
@@ -67,14 +68,26 @@ router.post(
     }
   );
 
-// Log out
-router.delete(
-    '/',
-    (_req, res) => {
-      res.clearCookie('token');
-      return res.json({ message: 'success' });
-    }
-  );
+// Logout route to clear the token
+router.delete('/', (req, res) => {
+  try {
+    // Clear the cookie
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      path: '/',
+    });
+
+    // Respond with success message
+    return res.json({ message: 'Successfully logged out' });
+
+  } catch (error) {
+    console.error('Logout error:', error);
+    return res.status(500).json({ message: 'An error occurred during logout' });
+  }
+});
+
 
   // Restore session user
 router.get(

@@ -40,6 +40,12 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [0, 50],  // Ensures name is no longer than 50 characters
+          msg: 'Spot name must be less than or equal to 50 characters',
+        },
+      },
     },
     address: {
       type: DataTypes.STRING,
