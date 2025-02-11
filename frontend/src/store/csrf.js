@@ -6,7 +6,13 @@ export async function  csrfFetch(url, options = {}) {
 
     if (options.method.toUpperCase() !== 'GET') {
         options.headers['Content-Type'] = options.headers['Content-Type'] || 'application/json'
-        options.headers['XSRF-Token'] = Cookies.get('XSRF-TOKEN')
+    //    console.log(Cookies.get('XSRF-Token'), "normal")
+        // options.headers['XSRF-Token'] = Cookies.get('XSRF-TOKEN')
+        const csrfToken = Cookies.get('XSRF-Token')
+
+        if (csrfToken) {
+            options.headers['XSRF-Token'] = csrfToken;
+        }
     }
 
     const res = await window.fetch(url, options)
