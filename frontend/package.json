@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
+    "pg": "^8.13.2",
+    "pg-hstore": "^2.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.4.0",
@@ -18,7 +20,8 @@
     "react-router-dom": "^6.29.0",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
