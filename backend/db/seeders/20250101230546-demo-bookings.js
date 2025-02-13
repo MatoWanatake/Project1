@@ -35,7 +35,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete('Bookings', {
         userId: { [Op.in]: [1, 2] },
-        // spotId: { [Op.in]: [1, 2] }
+        spotId: { [Op.in]: [1, 2] }
       }, {});
 
   },
