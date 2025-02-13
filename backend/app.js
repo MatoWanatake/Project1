@@ -40,6 +40,10 @@ if (!isProduction) {
     })
   );
 
+  app.get('/api/csrf/restore', (req, res) => {
+    res.json({ csrfToken: req.csrfToken() });
+  })
+
   app.use(routes);
 
   app.use((_req, _res, next) => {

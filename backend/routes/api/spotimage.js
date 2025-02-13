@@ -68,13 +68,13 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
       // Check if the spot image exists
       const spotImage = await SpotImage.findByPk(imageId);
       if (!spotImage) {
-        return res.status(404).json({ message: "Spot image not found" });
+        return res.status(404).json({ message: "Spot Image couldn't be found" });
       }
 
       // Check if the spot exists
       const spot = await Spot.findByPk(spotImage.spotId);
       if (!spot) {
-        return res.status(404).json({ message: "Spot not found" });
+        return res.status(404).json({ message: "Spot Image couldn't be found" });
       }
 
       // Check if the current user is the spot owner
@@ -86,7 +86,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
       await spotImage.destroy();
 
       // Return success response
-      return res.json({ message: "Spot image successfully deleted" });
+      return res.json({ message: "Successfully deleted" });
 
     } catch (error) {
       console.error(error);

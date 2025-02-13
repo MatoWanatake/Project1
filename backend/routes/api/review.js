@@ -1,5 +1,5 @@
 const express = require('express');
-const { Review, reviewImage } = require('../../db/models');
+const { Review, ReviewImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
@@ -52,7 +52,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     // Check if the review exists
     const review = await Review.findByPk(reviewId);
     if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
+      return res.status(404).json({ message: "Review couldn't be found" });
     }
 
     // Ensure that the auth user is author of review
@@ -61,9 +61,17 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
         message: 'Forbidden: You are not the author of this review.'
       });
     }
+    const existingImages = await ReviewImage.count({
+        where: { reviewId },
+      });
 
+      if (existingImages >= 10) {
+        return res.status(403).json({
+          message: 'Maximum number of images for this resource was reached',
+        });
+      }
     // Create a new ReviewImage associated with the review
-    const newReviewImage = await reviewImage.create({
+    const newReviewImage = await ReviewImage.create({
       reviewId,
       url,
       preview,
@@ -84,45 +92,58 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
 
 // PUT Edit a Review
 router.put('/:reviewId', requireAuth, async (req, res) => {
-    const { reviewId } = req.params;
-    const { review, stars } = req.body;
+    const { reviewId } = req.params
+    const { review, stars } = req.body
 
     try {
       // Check if review exists
-      const existingReview = await Review.findByPk(reviewId);
+      const existingReview = await Review.findByPk(reviewId)
       if (!existingReview) {
-        return res.status(404).json({ message: "Review not found" });
+        return res.status(404).json({ message: "Review couldn't be found" })
       }
 
       // Check if the current user is the reviewer
       if (existingReview.userId !== req.user.id) {
-        return res.status(403).json({ message: "You are not authorized to edit this review" });
+        return res.status(403).json({ message: "You are not authorized to edit this review" })
       }
 
-      // Validate input fields
-      if (review && (typeof review !== 'string' || review.length === 0)) {
-        return res.status(400).json({ message: 'Review text must be a non-empty string' });
+      const errors = {}
+
+      // Validate the 'review' field
+      if (review === undefined || review.trim().length === 0) {
+        errors.review = "Review text is required"
       }
 
-      if (stars && (typeof stars !== 'number' || stars < 1 || stars > 5)) {
-        return res.status(400).json({ message: 'Stars must be a number between 1 and 5' });
+      // Validate the 'stars' field
+      if (stars !== undefined) {
+        if (typeof stars !== 'number' || stars < 1 || stars > 5) {
+          errors.stars = "Stars must be an integer from 1 to 5"
+        }
       }
 
-      // Update review
+      // If there are validation errors, send a 400 Bad Request response
+      if (Object.keys(errors).length > 0) {
+        return res.status(400).json({
+          message: "Bad Request",
+          errors
+        })
+      }
+
+      // Update review (only update fields that were provided)
       const updatedReview = await existingReview.update({
         review: review || existingReview.review,
         stars: stars || existingReview.stars,
-        updatedAt: new Date(),
       });
 
-      // Return updated review
+      // Return the updated review
       return res.json(updatedReview);
 
     } catch (error) {
-      console.error(error);
+      console.error('Error updating review:', error);
       return res.status(500).json({ message: "An error occurred while updating the review" });
     }
   });
+
 
 // DELETE delete review
 router.delete('/:reviewId', requireAuth, async (req, res) => {
@@ -132,7 +153,7 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
       // Check if the review exists
       const review = await Review.findByPk(reviewId);
       if (!review) {
-        return res.status(404).json({ message: "Review not found" });
+        return res.status(404).json({ message: "Review couldn't be found" });
       }
 
       // Check if the user is the owner of the review

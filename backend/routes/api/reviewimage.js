@@ -43,7 +43,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
       // Check if the review image exists
       const reviewImage = await ReviewImage.findOne({where: {id: imageId}});
       if (!reviewImage) {
-        return res.status(404).json({ message: "Review image not found" });
+        return res.status(404).json({ message: "Review Image couldn't be found" });
       }
 
       // Check if the review associated with the image exists
@@ -61,7 +61,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
       await reviewImage.destroy();
 
       // Return success response
-      return res.json({ message: "Review image successfully deleted" });
+      return res.json({ message: "Successfully deleted" });
 
     } catch (error) {
       console.error(error);
