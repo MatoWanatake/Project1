@@ -45,7 +45,7 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
     options.tableName = "SpotImages";
-
+    await queryInterface.removeConstraint("airbnb_schema.SpotImage", "SpotImage_spotId_fkey")
     await queryInterface.dropTable(options);
   },
 };
