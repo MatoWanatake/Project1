@@ -33,10 +33,12 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-   options.tableName = 'SpotImage';
-   const Op = Sequelize.Op;
+    options.tableName = 'SpotImages';
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      spotId: { [Op.in]: [1,2] },
-    });
+      url: { [Op.in]: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg', 'https://example.com/image3.jpg'] }
+      // changes on seeder       change depends on seeder
+      // attribute needs to be unique
+    }, {});
   }
 };
